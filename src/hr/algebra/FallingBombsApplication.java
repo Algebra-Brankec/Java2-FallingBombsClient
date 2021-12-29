@@ -5,6 +5,7 @@
  */
 package hr.algebra;
 
+import hr.algebra.udp.MulticastClientThread;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -24,7 +25,7 @@ public class FallingBombsApplication extends Application {
         
         Scene scene = new Scene(root);
         
-        ClientThread t1 = new ClientThread(scene);
+        MulticastClientThread t1 = new MulticastClientThread(scene);
         t1.setDaemon(true);
         t1.start();
         
