@@ -9,10 +9,14 @@ import hr.algebra.model.BtnBomb;
 import hr.algebra.model.Bomb;
 import hr.algebra.model.Player;
 import hr.algebra.model.UDPDataPackage;
+import hr.algebra.udp.MulticastClientThread;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -23,6 +27,8 @@ import javafx.scene.layout.AnchorPane;
  * @author brand
  */
 public class Game {
+    private MulticastClientThread t1;
+    
     private UDPDataPackage udpPackage = new UDPDataPackage();
     private Player player;
     
@@ -41,18 +47,44 @@ public class Game {
     }
     
     public void run() {
+        startUDCSockets();
         gameLoop();
     }
     
     private void gameLoop() {
-        Platform.runLater(new Runnable(){
-            @Override
-            public void run() {
-                ClearScreen();
+        Thread gameThread = new Thread(() -> {
+            Calendar cal = Calendar.getInstance();
+            int now = (int) cal.getTimeInMillis();
+            int lastFrame = (int) cal.getTimeInMillis();
 
-                RenderBombs();
+            while(true)
+            {
+                //limiting the while loop to 30 times a second
+                now = (int) cal.getTimeInMillis();
+                int delta = now - lastFrame;
+                lastFrame = now;
+
+                if(delta < 33)
+                {
+                    try {
+                        Thread.sleep(33 - delta);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+
+                Platform.runLater(new Runnable(){
+                    @Override
+                    public void run() {
+                        udpPackage = t1.getUdpPackage();
+                        ClearScreen();
+                        RenderBombs();
+                    }
+                });
             }
-        });
+        });  
+        gameThread.setDaemon(true);
+        gameThread.start();
     }
     
     public void setUDPDataPackage(UDPDataPackage udpPackage) {
@@ -60,7 +92,6 @@ public class Game {
     }
     
     private void RenderBombs() {
-
         for (Bomb bomb : udpPackage.getBombs()) {
             BtnBomb btnBomb = new BtnBomb(bomb.getX(), bomb.getY(), bomb.getWidth(), bomb.getHeight());
             btnBombs.add(btnBomb);
@@ -75,5 +106,11 @@ public class Game {
         }
         
         btnBombs.clear();
+    }
+
+    private void startUDCSockets() {
+        t1 = new MulticastClientThread();
+        t1.setDaemon(true);
+        t1.start();
     }
 }

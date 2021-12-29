@@ -25,10 +25,8 @@ public class FallingBombsApplication extends Application {
         
         Scene scene = new Scene(root);
         
-        MulticastClientThread t1 = new MulticastClientThread(scene);
-        t1.setDaemon(true);
-        t1.start();
-        
+        Game game = new Game(scene);
+        game.run();
         
         primaryStage.setTitle("Hello World!");
         primaryStage.setScene(scene);

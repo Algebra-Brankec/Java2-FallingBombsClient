@@ -36,12 +36,12 @@ public class MulticastClientThread extends Thread {
     private static final String GROUP = "GROUP";
     private static final Properties PROPERTIES = new Properties();
     
-    private Scene scene;
+    private UDPDataPackage udpPackage;
     
     private UnicastClientThread unicastCliThread;
-    
-    public MulticastClientThread(Scene scene){
-        this.scene = scene;
+
+    public UDPDataPackage getUdpPackage() {
+        return udpPackage;
     }
 
     static {
@@ -56,10 +56,7 @@ public class MulticastClientThread extends Thread {
     public void run() {
         // we use new Socket for each client call
         try (MulticastSocket client = new MulticastSocket(Integer.valueOf(PROPERTIES.getProperty(CLIENT_PORT)))) {
-
-            Game game = new Game(scene);
-            
-            UDPDataPackage udpPackage = new UDPDataPackage();
+            udpPackage = new UDPDataPackage();
             
             unicastCliThread = new UnicastClientThread("localhost", 12345);
             unicastCliThread.setDaemon(true);
@@ -84,10 +81,6 @@ public class MulticastClientThread extends Thread {
                         ObjectInputStream ois = new ObjectInputStream(bais)) {
                     udpPackage = (UDPDataPackage) ois.readObject();
                 }
-                
-                game.setUDPDataPackage(udpPackage);
-                
-                game.run();
             }
 
         } catch (SocketException | UnknownHostException e) {
