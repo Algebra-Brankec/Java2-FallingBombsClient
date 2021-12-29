@@ -24,15 +24,18 @@ public class UnicastClientThread extends Thread {
     private static String HOST = "localhost";
     private static int SERVER_PORT = 12345;
     
-    private int playerMovement = 0;
+    private static int playerMovement;
+    private static int oldPlayerMovement = -1;
 
     public UnicastClientThread(String host, int port) {
         HOST = host;
         SERVER_PORT = port;
     }
-    
-    
 
+    public int getPlayerMovement() {
+        return playerMovement;
+    }
+    
     public void setPlayerMovement(int playerMovement) {
         this.playerMovement = playerMovement;
     }
@@ -40,7 +43,6 @@ public class UnicastClientThread extends Thread {
     @Override
     public void run() {
         while (true) {
-            
             Calendar cal = Calendar.getInstance();
             int now = (int) cal.getTimeInMillis();
             int lastFrame = (int) cal.getTimeInMillis();
@@ -55,10 +57,10 @@ public class UnicastClientThread extends Thread {
                     Thread.sleep(33 - delta);
                 }
                 
-                byte[] buffer = ByteUtils.intToByteArray(playerMovement);
-                InetAddress serverAddress = InetAddress.getByName("localhost");
-                DatagramPacket packet = new DatagramPacket(buffer, buffer.length, serverAddress, 12345);
-                clientSocket.send(packet);
+                if (playerMovement != oldPlayerMovement) {
+                    sendPackage(clientSocket);
+                    oldPlayerMovement = playerMovement;
+                }
             } catch (InterruptedException | SocketException | UnknownHostException ex) {
                 Logger.getLogger(UnicastClientThread.class.getName()).log(Level.SEVERE, null, ex);
 
@@ -67,5 +69,12 @@ public class UnicastClientThread extends Thread {
             }
         }
 
+    }
+    
+    private void sendPackage(DatagramSocket clientSocket) throws IOException {
+        byte[] buffer = ByteUtils.intToByteArray(playerMovement);
+        InetAddress serverAddress = InetAddress.getByName(HOST);
+        DatagramPacket packet = new DatagramPacket(buffer, buffer.length, serverAddress, SERVER_PORT);
+        clientSocket.send(packet);
     }
 }

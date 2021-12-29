@@ -10,9 +10,11 @@ import hr.algebra.model.Bomb;
 import hr.algebra.model.Player;
 import hr.algebra.model.UDPDataPackage;
 import hr.algebra.udp.MulticastClientThread;
+import hr.algebra.udp.UnicastClientThread;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
@@ -28,6 +30,8 @@ import javafx.scene.layout.AnchorPane;
  */
 public class Game {
     private MulticastClientThread t1;
+    private UnicastClientThread unicastCliThread1;
+    private UnicastClientThread unicastCliThread2;
     
     private UDPDataPackage udpPackage = new UDPDataPackage();
     private Player player;
@@ -42,12 +46,12 @@ public class Game {
         apLevel = (AnchorPane) scene.lookup("#apLevel");
         
         player = new Player();
-        
         btnBombs = new ArrayList<>();
     }
     
     public void run() {
         startUDCSockets();
+        inputControl();
         gameLoop();
     }
     
@@ -73,6 +77,7 @@ public class Game {
                     }
                 }
 
+                //FX run on a specific thread that this will wait for it
                 Platform.runLater(new Runnable(){
                     @Override
                     public void run() {
@@ -85,6 +90,38 @@ public class Game {
         });  
         gameThread.setDaemon(true);
         gameThread.start();
+    }
+    
+    private void inputControl() {
+        scene.setOnKeyPressed(ke -> {
+            HashSet<String> key = new HashSet<>();
+            key.add(ke.getCode().toString());
+            
+            //if (player.getX() >= (apLevel.getWidth() / 2) - player.getWidth() * 1.5) {
+            //    unicastCliThread1.setPlayerMovement(0);
+            //}
+            //
+            //if (player.getX() <= 0) {
+            //    unicastCliThread1.setPlayerMovement(0);
+            //}
+                
+            if (key.contains("A")){
+                unicastCliThread1.setPlayerMovement(1);
+            }
+            
+            if (key.contains("D")){
+                unicastCliThread1.setPlayerMovement(2);
+            } 
+        });
+        
+        scene.setOnKeyReleased(ke -> {
+            HashSet<String> key = new HashSet<>();
+            key.add(ke.getCode().toString());
+                
+            if (key.size() > 0){
+                unicastCliThread1.setPlayerMovement(0);
+            }
+        });
     }
     
     public void setUDPDataPackage(UDPDataPackage udpPackage) {
@@ -112,5 +149,9 @@ public class Game {
         t1 = new MulticastClientThread();
         t1.setDaemon(true);
         t1.start();
+        
+        unicastCliThread1 = new UnicastClientThread("localhost", 12345);
+        unicastCliThread1.setDaemon(true);
+        unicastCliThread1.start();
     }
 }
