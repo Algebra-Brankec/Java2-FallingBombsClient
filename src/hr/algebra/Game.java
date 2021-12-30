@@ -24,6 +24,8 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
 
 /**
@@ -43,6 +45,8 @@ public class Game {
     private List<BtnBomb> btnBombs;
     private List<BtnPlayer> btnPlayers;
     private List<BtnPlayerHealth> btnPlayerHealths;
+    
+    private boolean gameOver = false;
     
     public Game(Scene scene, int serverPort) {
         this.scene = scene;
@@ -90,6 +94,8 @@ public class Game {
                         clearScreen();
                         renderBombs();
                         renderPlayers();
+                        
+                        gameOverMessage();
                     }
                 });
             }
@@ -171,5 +177,40 @@ public class Game {
         unicastCliThread1 = new UnicastClientThread("localhost", serverPort);
         unicastCliThread1.setDaemon(true);
         unicastCliThread1.start();
+    }
+    
+        
+    private int getLastPlayerIndex(){
+        for (int i = 0; i < udpPackage.getPlayers().size(); i++) {
+            if (udpPackage.getPlayers().get(i).getHealth() > 0) {
+                return i;
+            }
+        }
+        
+        return 0;
+    }
+    
+    private void gameOverMessage(){
+        if (gameOver){
+            return;
+        }
+        
+        int playerIndex = getLastPlayerIndex();
+        
+        if(playerIndex < 1){
+            return;
+        }
+        
+        gameOver = true;
+        
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("GAME OVER");
+        alert.setHeaderText("Game over!");
+        alert.setContentText("Player " + playerIndex + " won!");
+        alert.showAndWait().ifPresent(rs -> {
+            if (rs == ButtonType.OK) {
+                Platform.exit();
+            }
+        });
     }
 }
