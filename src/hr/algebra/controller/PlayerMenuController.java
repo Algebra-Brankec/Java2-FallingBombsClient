@@ -7,12 +7,14 @@ package hr.algebra.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -45,11 +47,17 @@ public class PlayerMenuController implements Initializable {
     @FXML
     private void onBtnPlayer1Action(ActionEvent event) {
         serverPort = 34530;
+        
+        Stage stage = (Stage) btnPlayer1.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
     private void onBtnPlayer2Action(ActionEvent event) {
         serverPort = 34531;
+        
+        Stage stage = (Stage) btnPlayer1.getScene().getWindow();
+        stage.close();
     }
 
     public int getServerPort() {
