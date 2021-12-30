@@ -13,19 +13,19 @@ public class BtnPlayerHealth extends Button {
     private int height = 25;
     private int maxChunkCount = 3;
     
-    public BtnPlayerHealth(AnchorPane ap, String side) {
+    public BtnPlayerHealth(AnchorPane ap, int side, int health) {
+        maxChunkCount = health;
         setPrefSize(widthChunk*maxChunkCount, height);
         setStyle("-fx-background-color: red");
         
-        if (side == "left") {
+        if (side == 1) {
             setLayoutX(28);
             setLayoutY(31);
         }
-        if (side == "right") {
+        if (side == 2) {
             setLayoutX(688);
             setLayoutY(31);
         }
-        
         ap.getChildren().add(this);
     }
     

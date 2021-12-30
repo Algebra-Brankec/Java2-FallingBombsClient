@@ -13,14 +13,8 @@ import javafx.scene.layout.AnchorPane;
  */
 public class BtnPlayer extends Button {
     public String side;
-    public int maxHealth = 3;
-    public int health = 3;
-    public boolean stunned = false;
-    public int speed = 20;
     
-    private BtnPlayerHealth btnPlayerHealth;
-    
-    public BtnPlayer(AnchorPane ap, int side, int x, int y, int width, int height) {
+    public BtnPlayer(AnchorPane ap, int side, int x, int y, int width, int height, int health) {
         setPrefSize(width, height);
         setLayoutX(x);
         setLayoutY(y);
@@ -34,44 +28,5 @@ public class BtnPlayer extends Button {
                 this.side = "right";
                 break;
         }
-        
-        btnPlayerHealth = new BtnPlayerHealth(ap, this.side);
-    }
-    
-    public void takeDamage(int value) {
-        if (health - value < 0) {
-            die();
-            return;
-        }
-        
-        if (health - value >= 0) {
-            health -= value;
-            btnPlayerHealth.updateSize(health);
-        }
-        
-        if (health <= 0) {
-            die();
-        }
-    }
-    
-    public void getHealth(int value) {
-        if (health <= 0) {
-            die();
-        }
-        
-        if (health + value > maxHealth) {
-            health = maxHealth;
-            return;
-        }
-        
-        health += value;
-        btnPlayerHealth.updateSize(health);
-    }
-    
-    private void die() {
-        stunned = true;
-        speed = 0;
-        health = 0;
-        btnPlayerHealth.updateSize(health);
     }
 }

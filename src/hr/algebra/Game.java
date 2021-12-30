@@ -8,6 +8,7 @@ package hr.algebra;
 import hr.algebra.model.BtnBomb;
 import hr.algebra.model.Bomb;
 import hr.algebra.model.BtnPlayer;
+import hr.algebra.model.BtnPlayerHealth;
 import hr.algebra.model.Player;
 import hr.algebra.model.UDPDataPackage;
 import hr.algebra.udp.MulticastClientThread;
@@ -41,6 +42,7 @@ public class Game {
     
     private List<BtnBomb> btnBombs;
     private List<BtnPlayer> btnPlayers;
+    private List<BtnPlayerHealth> btnPlayerHealths;
     
     public Game(Scene scene, int serverPort) {
         this.scene = scene;
@@ -49,6 +51,7 @@ public class Game {
         
         btnBombs = new ArrayList<>();
         btnPlayers = new ArrayList<>();
+        btnPlayerHealths = new ArrayList<>();
     }
     
     public void run() {
@@ -134,8 +137,10 @@ public class Game {
     
     private void renderPlayers() {
         for (Player player : udpPackage.getPlayers()) {
-            BtnPlayer btnPlayer = new BtnPlayer(apLevel, player.getSide(), player.getX(), player.getY(), player.getWidth(), player.getHeight());
+            BtnPlayer btnPlayer = new BtnPlayer(apLevel, player.getSide(), player.getX(), player.getY(), player.getWidth(), player.getHeight(), player.getHealth());
+            BtnPlayerHealth btnPlayerHealth = new BtnPlayerHealth(apLevel, player.getSide(), player.getHealth());
             btnPlayers.add(btnPlayer);
+            btnPlayerHealths.add(btnPlayerHealth);
             
             apLevel.getChildren().add(btnPlayer);
         }
@@ -151,6 +156,11 @@ public class Game {
             apLevel.getChildren().remove(btnPlayer);
         }
         btnPlayers.clear();
+        
+        for(BtnPlayerHealth btnPlayerHealth : btnPlayerHealths) {
+            apLevel.getChildren().remove(btnPlayerHealth);
+        }
+        btnPlayerHealths.clear();
     }
 
     private void startUDCSockets() {
