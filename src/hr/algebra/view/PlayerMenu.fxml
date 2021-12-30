@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<fx:root id="AnchorPane" prefHeight="400.0" prefWidth="600.0" type="AnchorPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.algebra.controller.PlayerMenuController">
+   <children>
+      <Button fx:id="btnPlayer1" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#onBtnPlayer1Action" prefHeight="371.0" prefWidth="268.0" text="Player 1">
+         <font>
+            <Font size="45.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnPlayer2" layoutX="318.0" layoutY="14.0" mnemonicParsing="false" onAction="#onBtnPlayer2Action" prefHeight="371.0" prefWidth="268.0" text="Player 2">
+         <font>
+            <Font size="45.0" />
+         </font>
+      </Button>
+   </children>
+</fx:root>

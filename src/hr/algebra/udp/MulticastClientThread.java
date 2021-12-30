@@ -80,12 +80,14 @@ public class MulticastClientThread extends Thread {
                 try (ByteArrayInputStream bais = new ByteArrayInputStream(udpPackageBytes);
                         ObjectInputStream ois = new ObjectInputStream(bais)) {
                     udpPackage = (UDPDataPackage) ois.readObject();
+                } catch (Exception e){
+                    
                 }
             }
 
         } catch (SocketException | UnknownHostException e) {
             Logger.getLogger(MulticastClientThread.class.getName()).log(Level.SEVERE, null, e);
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException e) {
             Logger.getLogger(MulticastClientThread.class.getName()).log(Level.SEVERE, null, e);
         }
     }
