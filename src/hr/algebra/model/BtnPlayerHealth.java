@@ -21,6 +21,10 @@ public class BtnPlayerHealth extends Button {
             setLayoutX(28);
             setLayoutY(31);
         }
+        if (side == "right") {
+            setLayoutX(688);
+            setLayoutY(31);
+        }
         
         ap.getChildren().add(this);
     }

@@ -13,20 +13,35 @@ import java.util.Random;
  * @author brand
  */
 public class Player implements Serializable {
+    private int id;
+    private short side;
+    
     private short x;
     private short y;
     private short width;
     private short height;
     
-    private int maxHealth = 3;
-    private int health = 3;
+    private short maxHealth = 3;
+    private short health = 3;
     private boolean stunned = false;
-    private int speed = 20;
+    private short speed = 20;
+    
+    private boolean isActive = false;
 
-    public Player() {
+    public Player(int id, String side) {
+        this.id     =   id;
+        switch(side){
+            case "left":
+                this.side = 1;
+                break;
+            case "right":
+                this.side = 2;  
+                break;
+        }
+        
         this.width  =   (short)(50);
         this.height =   (short)(90);
-        this.x      =   (short)(100);
+        this.x      =   (short)(100 * this.side);
         this.y      =   (short)(410);
     }
     
@@ -64,12 +79,32 @@ public class Player implements Serializable {
         health = 0;
     }
 
+    public short getSide() {
+        return side;
+    }
+
+    public boolean isIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = (short)id;
+    }
+
     public int getMaxHealth() {
         return maxHealth;
     }
 
     public void setMaxHealth(int maxHealth) {
-        this.maxHealth = maxHealth;
+        this.maxHealth = (short)maxHealth;
     }
 
     public int getHealth() {
@@ -77,7 +112,7 @@ public class Player implements Serializable {
     }
 
     public void setHealth(int health) {
-        this.health = health;
+        this.health = (short)health;
     }
 
     public boolean isStunned() {
@@ -93,7 +128,7 @@ public class Player implements Serializable {
     }
 
     public void setSpeed(int speed) {
-        this.speed = speed;
+        this.speed = (short)speed;
     }
 
     public int getX() {

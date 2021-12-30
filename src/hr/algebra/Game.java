@@ -7,6 +7,7 @@ package hr.algebra;
 
 import hr.algebra.model.BtnBomb;
 import hr.algebra.model.Bomb;
+import hr.algebra.model.BtnPlayer;
 import hr.algebra.model.Player;
 import hr.algebra.model.UDPDataPackage;
 import hr.algebra.udp.MulticastClientThread;
@@ -31,22 +32,23 @@ import javafx.scene.layout.AnchorPane;
 public class Game {
     private MulticastClientThread t1;
     private UnicastClientThread unicastCliThread1;
-    private UnicastClientThread unicastCliThread2;
+    private int serverPort;
     
     private UDPDataPackage udpPackage = new UDPDataPackage();
-    private Player player;
     
     private final Scene scene;
     private final AnchorPane apLevel;
     
     private List<BtnBomb> btnBombs;
+    private List<BtnPlayer> btnPlayers;
     
-    public Game(Scene scene) {
+    public Game(Scene scene, int serverPort) {
         this.scene = scene;
+        this.serverPort = serverPort;
         apLevel = (AnchorPane) scene.lookup("#apLevel");
         
-        player = new Player();
         btnBombs = new ArrayList<>();
+        btnPlayers = new ArrayList<>();
     }
     
     public void run() {
@@ -82,8 +84,9 @@ public class Game {
                     @Override
                     public void run() {
                         udpPackage = t1.getUdpPackage();
-                        ClearScreen();
-                        RenderBombs();
+                        clearScreen();
+                        renderBombs();
+                        renderPlayers();
                     }
                 });
             }
@@ -96,14 +99,6 @@ public class Game {
         scene.setOnKeyPressed(ke -> {
             HashSet<String> key = new HashSet<>();
             key.add(ke.getCode().toString());
-            
-            //if (player.getX() >= (apLevel.getWidth() / 2) - player.getWidth() * 1.5) {
-            //    unicastCliThread1.setPlayerMovement(0);
-            //}
-            //
-            //if (player.getX() <= 0) {
-            //    unicastCliThread1.setPlayerMovement(0);
-            //}
                 
             if (key.contains("A")){
                 unicastCliThread1.setPlayerMovement(1);
@@ -128,7 +123,7 @@ public class Game {
         this.udpPackage = udpPackage;
     }
     
-    private void RenderBombs() {
+    private void renderBombs() {
         for (Bomb bomb : udpPackage.getBombs()) {
             BtnBomb btnBomb = new BtnBomb(bomb.getX(), bomb.getY(), bomb.getWidth(), bomb.getHeight());
             btnBombs.add(btnBomb);
@@ -136,13 +131,26 @@ public class Game {
             apLevel.getChildren().add(btnBomb);
         }
     }
+    
+    private void renderPlayers() {
+        for (Player player : udpPackage.getPlayers()) {
+            BtnPlayer btnPlayer = new BtnPlayer(apLevel, player.getSide(), player.getX(), player.getY(), player.getWidth(), player.getHeight());
+            btnPlayers.add(btnPlayer);
+            
+            apLevel.getChildren().add(btnPlayer);
+        }
+    }
 
-    private void ClearScreen() {
+    private void clearScreen() {
         for(BtnBomb btnBomb : btnBombs) {
             apLevel.getChildren().remove(btnBomb);
         }
-        
         btnBombs.clear();
+        
+        for(BtnPlayer btnPlayer : btnPlayers) {
+            apLevel.getChildren().remove(btnPlayer);
+        }
+        btnPlayers.clear();
     }
 
     private void startUDCSockets() {
@@ -150,7 +158,7 @@ public class Game {
         t1.setDaemon(true);
         t1.start();
         
-        unicastCliThread1 = new UnicastClientThread("localhost", 12345);
+        unicastCliThread1 = new UnicastClientThread("localhost", serverPort);
         unicastCliThread1.setDaemon(true);
         unicastCliThread1.start();
     }

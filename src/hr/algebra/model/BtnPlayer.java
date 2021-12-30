@@ -12,6 +12,7 @@ import javafx.scene.layout.AnchorPane;
  * @author brand
  */
 public class BtnPlayer extends Button {
+    public String side;
     public int maxHealth = 3;
     public int health = 3;
     public boolean stunned = false;
@@ -19,14 +20,22 @@ public class BtnPlayer extends Button {
     
     private BtnPlayerHealth btnPlayerHealth;
     
-    public BtnPlayer(AnchorPane ap, String color) {
-        setPrefSize(50, 90);
-        setStyle("-fx-background-color: " + color);
-        setLayoutX(100);
-        setLayoutY(410);
-        ap.getChildren().add(this);
+    public BtnPlayer(AnchorPane ap, int side, int x, int y, int width, int height) {
+        setPrefSize(width, height);
+        setLayoutX(x);
+        setLayoutY(y);
+        switch(side){
+            case 1:
+                setStyle("-fx-background-color: green");
+                this.side = "left";
+                break;
+            case 2:
+                setStyle("-fx-background-color: red"); 
+                this.side = "right";
+                break;
+        }
         
-        btnPlayerHealth = new BtnPlayerHealth(ap, "left");
+        btnPlayerHealth = new BtnPlayerHealth(ap, this.side);
     }
     
     public void takeDamage(int value) {

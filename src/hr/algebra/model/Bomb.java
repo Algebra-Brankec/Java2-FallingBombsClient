@@ -69,6 +69,6 @@ public class Bomb implements Serializable {
     }
     
     public int getWeight() {
-        return (width + height) / 75;
+        return (width + height) / 37;
     }
 }

@@ -29,6 +29,10 @@ public class PlayerMenuController implements Initializable {
     private Button btnPlayer2;
     
     private static int serverPort;
+    
+    public PlayerMenuController(){
+        serverPort = 0;
+    }
 
     /**
      * Initializes the controller class.

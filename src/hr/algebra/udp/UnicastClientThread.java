@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  */
 public class UnicastClientThread extends Thread {
     private static String HOST = "localhost";
-    private static int SERVER_PORT = 12345;
+    private int SERVER_PORT = 12345;
     
     private static int playerMovement;
     private static int oldPlayerMovement = -1;
