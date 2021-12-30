@@ -35,7 +35,7 @@ public class FallingBombsApplication extends Application {
         
         startGame(scene);
         
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("Da Bombs!");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -60,9 +60,6 @@ public class FallingBombsApplication extends Application {
                 }
                 serverPort = playerMenuController.getServerPort();
             }
-            
-            Game game = new Game(scene, serverPort);
-            game.run();
         });  
         gameThread.setDaemon(true);
         gameThread.start();

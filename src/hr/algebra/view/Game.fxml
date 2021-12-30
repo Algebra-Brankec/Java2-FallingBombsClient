@@ -10,7 +10,8 @@
             <Button fx:id="btnFence" layoutX="416.0" layoutY="304.0" mnemonicParsing="false" prefHeight="194.0" prefWidth="1.0" styleClass="buttonFence" stylesheets="@../style/main.css" />
             <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" prefHeight="59.0" prefWidth="168.0" styleClass="buttonHealthBox" stylesheets="@../style/main.css" />
             <Button layoutX="675.0" layoutY="14.0" mnemonicParsing="false" prefHeight="59.0" prefWidth="168.0" styleClass="buttonHealthBox" stylesheets="@../style/main.css" />
-            <Button fx:id="btnMenu" layoutX="396.0" layoutY="12.0" mnemonicParsing="false" onAction="#btnMenuAction" text="Menu" />
+            <Button fx:id="btnMenu" layoutX="401.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnMenuAction" text="Menu" />
+            <Button fx:id="btnPauseResume" layoutX="404.0" layoutY="44.0" mnemonicParsing="false" onAction="#btnPauseResumeAction" text="Start" />
          </children>
       </AnchorPane>
       <Button fx:id="btnFloor" layoutY="498.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="857.0" styleClass="buttonFloor" stylesheets="@../style/main.css" />

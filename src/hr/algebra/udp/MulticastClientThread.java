@@ -5,7 +5,6 @@
  */
 package hr.algebra.udp;
 
-import hr.algebra.Game;
 import hr.algebra.model.Bomb;
 import hr.algebra.model.UDPDataPackage;
 import hr.algebra.utilities.ByteUtils;
@@ -37,8 +36,6 @@ public class MulticastClientThread extends Thread {
     private static final Properties PROPERTIES = new Properties();
     
     private UDPDataPackage udpPackage;
-    
-    private UnicastClientThread unicastCliThread;
 
     public UDPDataPackage getUdpPackage() {
         return udpPackage;
@@ -58,30 +55,37 @@ public class MulticastClientThread extends Thread {
         try (MulticastSocket client = new MulticastSocket(Integer.valueOf(PROPERTIES.getProperty(CLIENT_PORT)))) {
             udpPackage = new UDPDataPackage();
             
-            unicastCliThread = new UnicastClientThread("localhost", 12345);
-            unicastCliThread.setDaemon(true);
-            unicastCliThread.start();
-            
             InetAddress groupAddress = InetAddress.getByName(PROPERTIES.getProperty(GROUP));
             client.joinGroup(groupAddress);
-
-            while (true) {
-
-                // first we read the payload length
-                byte[] numberOfUDPDataPackageBytes = new byte[4];
-                DatagramPacket packet = new DatagramPacket(numberOfUDPDataPackageBytes, numberOfUDPDataPackageBytes.length);
-                client.receive(packet);
-                int length = ByteUtils.byteArrayToInt(numberOfUDPDataPackageBytes);
-
-                // we can read payload of that length
-                byte[] udpPackageBytes = new byte[length];
-                packet = new DatagramPacket(udpPackageBytes, udpPackageBytes.length);
-                client.receive(packet);
-                try (ByteArrayInputStream bais = new ByteArrayInputStream(udpPackageBytes);
-                        ObjectInputStream ois = new ObjectInputStream(bais)) {
-                    udpPackage = (UDPDataPackage) ois.readObject();
-                } catch (Exception e){
+            
+            long lastTime = System.nanoTime();
+            final double ns = 1000000000.0 / 30.0;
+            double delta = 0;
+            while(true){
+                long now = System.nanoTime();
+                delta += (now - lastTime) / ns;
+                lastTime = now;
+                while(delta >= 1){
                     
+                    // first we read the payload length
+                    byte[] numberOfUDPDataPackageBytes = new byte[4];
+                    DatagramPacket packet = new DatagramPacket(numberOfUDPDataPackageBytes, numberOfUDPDataPackageBytes.length);
+                    client.receive(packet);
+                    int length = ByteUtils.byteArrayToInt(numberOfUDPDataPackageBytes);
+                    
+                    if (length < 1)
+                        continue;
+
+                    // we can read payload of that length
+                    byte[] udpPackageBytes = new byte[length];
+                    packet = new DatagramPacket(udpPackageBytes, udpPackageBytes.length);
+                    client.receive(packet);
+                    try (ByteArrayInputStream bais = new ByteArrayInputStream(udpPackageBytes);
+                            ObjectInputStream ois = new ObjectInputStream(bais)) {
+                        udpPackage = (UDPDataPackage) ois.readObject();
+                    } catch (Exception e){
+
+                    }
                 }
             }
 

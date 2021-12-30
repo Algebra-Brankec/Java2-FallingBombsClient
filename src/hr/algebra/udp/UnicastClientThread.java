@@ -42,33 +42,28 @@ public class UnicastClientThread extends Thread {
 
     @Override
     public void run() {
-        while (true) {
-            Calendar cal = Calendar.getInstance();
-            int now = (int) cal.getTimeInMillis();
-            int lastFrame = (int) cal.getTimeInMillis();
-            try (DatagramSocket clientSocket = new DatagramSocket()) {
-                //limiting the while loop to 30 times a second
-                now = (int) cal.getTimeInMillis();
-                int delta = now - lastFrame;
-                lastFrame = now;
+        long lastTime = System.nanoTime();
+        final double ns = 1000000000.0 / 60.0;
+        double delta = 0;
+        while(true){
+            long now = System.nanoTime();
+            delta += (now - lastTime) / ns;
+            lastTime = now;
+            while(delta >= 1){
+                try (DatagramSocket clientSocket = new DatagramSocket()) {
 
-                if(delta < 33)
-                {
-                    Thread.sleep(33 - delta);
-                }
-                
-                if (playerAction != oldPlayerAction) {
-                    sendPackage(clientSocket);
-                    oldPlayerAction = playerAction;
-                }
-            } catch (InterruptedException | SocketException | UnknownHostException ex) {
-                Logger.getLogger(UnicastClientThread.class.getName()).log(Level.SEVERE, null, ex);
+                    if (playerAction != oldPlayerAction) {
+                        sendPackage(clientSocket);
+                        oldPlayerAction = playerAction;
+                    }
+                } catch (SocketException | UnknownHostException ex) {
+                    Logger.getLogger(UnicastClientThread.class.getName()).log(Level.SEVERE, null, ex);
 
-            } catch (IOException ex) {
-                Logger.getLogger(UnicastClientThread.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(UnicastClientThread.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
-
     }
     
     private void sendPackage(DatagramSocket clientSocket) throws IOException {
