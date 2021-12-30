@@ -24,20 +24,20 @@ public class UnicastClientThread extends Thread {
     private static String HOST = "localhost";
     private int SERVER_PORT = 12345;
     
-    private static int playerMovement;
-    private static int oldPlayerMovement = -1;
+    private static int playerAction;
+    private static int oldPlayerAction = -1;
 
     public UnicastClientThread(String host, int port) {
         HOST = host;
         SERVER_PORT = port;
     }
 
-    public int getPlayerMovement() {
-        return playerMovement;
+    public int getPlayerAction() {
+        return playerAction;
     }
     
-    public void setPlayerMovement(int playerMovement) {
-        this.playerMovement = playerMovement;
+    public void setPlayerAction(int playerMovement) {
+        this.playerAction = playerMovement;
     }
 
     @Override
@@ -57,9 +57,9 @@ public class UnicastClientThread extends Thread {
                     Thread.sleep(33 - delta);
                 }
                 
-                if (playerMovement != oldPlayerMovement) {
+                if (playerAction != oldPlayerAction) {
                     sendPackage(clientSocket);
-                    oldPlayerMovement = playerMovement;
+                    oldPlayerAction = playerAction;
                 }
             } catch (InterruptedException | SocketException | UnknownHostException ex) {
                 Logger.getLogger(UnicastClientThread.class.getName()).log(Level.SEVERE, null, ex);
@@ -72,7 +72,7 @@ public class UnicastClientThread extends Thread {
     }
     
     private void sendPackage(DatagramSocket clientSocket) throws IOException {
-        byte[] buffer = ByteUtils.intToByteArray(playerMovement);
+        byte[] buffer = ByteUtils.intToByteArray(playerAction);
         InetAddress serverAddress = InetAddress.getByName(HOST);
         DatagramPacket packet = new DatagramPacket(buffer, buffer.length, serverAddress, SERVER_PORT);
         clientSocket.send(packet);

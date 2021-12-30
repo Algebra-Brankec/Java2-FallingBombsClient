@@ -5,8 +5,10 @@
  */
 package hr.algebra.controller;
 
+import hr.algebra.udp.UnicastClientThread;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -21,18 +23,23 @@ import javafx.scene.layout.AnchorPane;
  */
 public class GameController implements Initializable {
 
+    private UnicastClientThread unicastCliThread;
+    
     @FXML
     private Button btnFloor;
     @FXML
     private Button btnFence;
     @FXML
     private AnchorPane apLevel;
+    @FXML
+    private Button btnMenu;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        //unicastCliThread = new UnicastClientThread();
     }    
 
     @FXML
@@ -41,6 +48,18 @@ public class GameController implements Initializable {
 
     @FXML
     private void keyReleased(KeyEvent event) {
+    }
+
+    @FXML
+    private void btnMenuAction(ActionEvent event) {
+        //int playerAction = unicastCliThread.getPlayerAction();
+        //
+        //if(playerAction != 101)
+        //    unicastCliThread.setPlayerAction(101);
+        //else {
+        //    //Sending singla to resume the game then sending 0 as the default state
+        //    unicastCliThread.setPlayerAction(100);
+        //}
     }
     
 }

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="315.0" prefWidth="299.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17" fx:controller="hr.algebra.controller.GameMenuController">
+   <children>
+      <Button fx:id="btnSaveGame" layoutX="97.0" layoutY="46.0" mnemonicParsing="false" onAction="#btnSaveGameAction" prefHeight="40.0" prefWidth="105.0" text="Save game" />
+      <Button fx:id="btnLoadGame" layoutX="97.0" layoutY="105.0" mnemonicParsing="false" onAction="#btnLoadGameAction" prefHeight="40.0" prefWidth="105.0" text="Load game" />
+      <Button fx:id="btnSaveGameDoc" layoutX="97.0" layoutY="170.0" mnemonicParsing="false" onAction="#btnSaveGameDocAction" prefHeight="40.0" prefWidth="105.0" text="Save game doc" />
+      <Button fx:id="btnResume" layoutX="97.0" layoutY="230.0" mnemonicParsing="false" onAction="#btnResumeAction" prefHeight="40.0" prefWidth="105.0" text="Resume" />
+   </children>
+</AnchorPane>

@@ -34,7 +34,7 @@ import javafx.scene.layout.AnchorPane;
  */
 public class Game {
     private MulticastClientThread t1;
-    private UnicastClientThread unicastCliThread1;
+    private UnicastClientThread unicastCliThread;
     private int serverPort;
     
     private UDPDataPackage udpPackage = new UDPDataPackage();
@@ -47,6 +47,7 @@ public class Game {
     private List<BtnPlayerHealth> btnPlayerHealths;
     
     private boolean gameOver = false;
+    private boolean gameOverMessage = false;
     
     public Game(Scene scene, int serverPort) {
         this.scene = scene;
@@ -108,22 +109,40 @@ public class Game {
         scene.setOnKeyPressed(ke -> {
             HashSet<String> key = new HashSet<>();
             key.add(ke.getCode().toString());
-                
+            int playerAction = unicastCliThread.getPlayerAction();
+            
+            //suspend further actions until action is at number 100(Game Resumed)
+            if(playerAction == 101){
+                return;
+            }
+            
+            //Anything below this line cannot be executed while the game is paused
             if (key.contains("A")){
-                unicastCliThread1.setPlayerMovement(1);
+                unicastCliThread.setPlayerAction(1);
             }
             
             if (key.contains("D")){
-                unicastCliThread1.setPlayerMovement(2);
+                unicastCliThread.setPlayerAction(2);
             } 
         });
         
         scene.setOnKeyReleased(ke -> {
             HashSet<String> key = new HashSet<>();
             key.add(ke.getCode().toString());
-                
-            if (key.size() > 0){
-                unicastCliThread1.setPlayerMovement(0);
+            int playerAction = unicastCliThread.getPlayerAction();
+            
+            //values between 101-199 will cause the game to pause and 100 will cause the game to resume
+            //if (key.contains("ESCAPE")){
+            //    if(playerAction != 101)
+            //        unicastCliThread.setPlayerAction(101);
+            //    else {
+            //        //Sending singla to resume the game then sending 0 as the default state
+            //        unicastCliThread.setPlayerAction(100);
+            //    }
+            //} 
+            
+            if (key.size() > 0 && (playerAction == 1 || playerAction == 2)){
+                unicastCliThread.setPlayerAction(0);
             }
         });
     }
@@ -174,9 +193,9 @@ public class Game {
         t1.setDaemon(true);
         t1.start();
         
-        unicastCliThread1 = new UnicastClientThread("localhost", serverPort);
-        unicastCliThread1.setDaemon(true);
-        unicastCliThread1.start();
+        unicastCliThread = new UnicastClientThread("localhost", serverPort);
+        unicastCliThread.setDaemon(true);
+        unicastCliThread.start();
     }
     
         
@@ -191,17 +210,21 @@ public class Game {
     }
     
     private void gameOverMessage(){
-        if (gameOver){
+        if (!gameOver){
             return;
         }
         
-        int playerIndex = getLastPlayerIndex();
+        if (gameOverMessage){
+            return;
+        }
+        
+        int playerIndex = getLastPlayerIndex() + 1;
         
         if(playerIndex < 1){
             return;
         }
         
-        gameOver = true;
+        gameOverMessage = true;
         
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("GAME OVER");
