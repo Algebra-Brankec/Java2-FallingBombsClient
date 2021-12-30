@@ -107,7 +107,7 @@ public class GameController implements Initializable {
            gameStart = true;
            running = true;
            btnPauseResume.setText("Pause"); 
-           //unicastCliThread.setPlayerAction(100);
+           unicastCliThread.setPlayerAction(100);
            
            return;
         }
