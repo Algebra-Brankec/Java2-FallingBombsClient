@@ -86,6 +86,7 @@ public class MulticastClientThread extends Thread {
                     } catch (Exception e){
 
                     }
+                    delta--;
                 }
             }
 

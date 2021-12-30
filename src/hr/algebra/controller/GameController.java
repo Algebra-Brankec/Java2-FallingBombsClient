@@ -98,8 +98,6 @@ public class GameController implements Initializable {
         //    //Sending singla to resume the game then sending 0 as the default state
         //    unicastCliThread.setPlayerAction(100);
         //}
-        
-        
     }
     
     @FXML
@@ -132,38 +130,28 @@ public class GameController implements Initializable {
     
     private void gameLoop() {
         Thread gameThread = new Thread(() -> {
-            Calendar cal = Calendar.getInstance();
-            int now = (int) cal.getTimeInMillis();
-            int lastFrame = (int) cal.getTimeInMillis();
+            long lastTime = System.nanoTime();
+            final double ns = 1000000000.0 / 30.0;
+            double delta = 0;
+            while(true){
+                long now = System.nanoTime();
+                delta += (now - lastTime) / ns;
+                lastTime = now;
+                while(delta >= 1){
+                    //FX run on a specific thread that this will wait for it
+                    Platform.runLater(new Runnable(){
+                        @Override
+                        public void run() {
+                            udpPackage = t1.getUdpPackage();
+                            clearScreen();
+                            renderBombs();
+                            renderPlayers();
 
-            while(true)
-            {
-                //limiting the while loop to 30 times a second
-                now = (int) cal.getTimeInMillis();
-                int delta = now - lastFrame;
-                lastFrame = now;
-
-                if(delta < 33)
-                {
-                    try {
-                        Thread.sleep(33 - delta);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(GameController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                            gameOverMessage();
+                        }
+                    });
+                    delta--;
                 }
-
-                //FX run on a specific thread that this will wait for it
-                Platform.runLater(new Runnable(){
-                    @Override
-                    public void run() {
-                        udpPackage = t1.getUdpPackage();
-                        clearScreen();
-                        renderBombs();
-                        renderPlayers();
-                        
-                        gameOverMessage();
-                    }
-                });
             }
         });  
         gameThread.setDaemon(true);

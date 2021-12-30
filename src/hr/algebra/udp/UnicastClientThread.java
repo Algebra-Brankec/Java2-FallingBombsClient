@@ -62,6 +62,7 @@ public class UnicastClientThread extends Thread {
                 } catch (IOException ex) {
                     Logger.getLogger(UnicastClientThread.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                delta--;
             }
         }
     }
