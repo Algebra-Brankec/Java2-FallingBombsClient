@@ -5,7 +5,7 @@
  */
 package hr.algebra.controller;
 
-import hr.algebra.udp.UnicastClientThread;
+import hr.algebra.udp.UnicastClientPlayerActionThread;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -22,7 +22,7 @@ import javafx.scene.control.Button;
  */
 public class GameMenuController implements Initializable {
     
-    private UnicastClientThread unicastCliThread1;
+    private UnicastClientPlayerActionThread unicastCliThread1;
 
     @FXML
     private Button btnSaveGame;

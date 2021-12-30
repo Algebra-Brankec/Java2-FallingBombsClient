@@ -11,8 +11,8 @@ import hr.algebra.model.BtnPlayer;
 import hr.algebra.model.BtnPlayerHealth;
 import hr.algebra.model.Player;
 import hr.algebra.model.UDPDataPackage;
-import hr.algebra.udp.MulticastClientThread;
-import hr.algebra.udp.UnicastClientThread;
+import hr.algebra.udp.MulticastClientGameDataThread;
+import hr.algebra.udp.UnicastClientPlayerActionThread;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -40,8 +40,8 @@ import javafx.scene.layout.AnchorPane;
  */
 public class GameController implements Initializable {
 
-    private MulticastClientThread t1;
-    private UnicastClientThread unicastCliThread;
+    private MulticastClientGameDataThread t1;
+    private UnicastClientPlayerActionThread unicastCliThread;
     private int serverPort;
     private PlayerMenuController playerMenuController;
     
@@ -233,11 +233,11 @@ public class GameController implements Initializable {
     }
 
     private void startUDCSockets() {
-        t1 = new MulticastClientThread();
+        t1 = new MulticastClientGameDataThread();
         t1.setDaemon(true);
         t1.start();
         
-        unicastCliThread = new UnicastClientThread("localhost", playerMenuController.getServerPort());
+        unicastCliThread = new UnicastClientPlayerActionThread("localhost", playerMenuController.getServerPort());
         unicastCliThread.setDaemon(true);
         unicastCliThread.start();
     }

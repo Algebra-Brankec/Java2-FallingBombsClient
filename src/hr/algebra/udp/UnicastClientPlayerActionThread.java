@@ -20,14 +20,14 @@ import java.util.logging.Logger;
  *
  * @author daniel.bele
  */
-public class UnicastClientThread extends Thread {
+public class UnicastClientPlayerActionThread extends Thread {
     private static String HOST = "localhost";
     private int SERVER_PORT = 12345;
     
     private static int playerAction;
     private static int oldPlayerAction = -1;
 
-    public UnicastClientThread(String host, int port) {
+    public UnicastClientPlayerActionThread(String host, int port) {
         HOST = host;
         SERVER_PORT = port;
     }
@@ -57,10 +57,10 @@ public class UnicastClientThread extends Thread {
                         oldPlayerAction = playerAction;
                     }
                 } catch (SocketException | UnknownHostException ex) {
-                    Logger.getLogger(UnicastClientThread.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(UnicastClientPlayerActionThread.class.getName()).log(Level.SEVERE, null, ex);
 
                 } catch (IOException ex) {
-                    Logger.getLogger(UnicastClientThread.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(UnicastClientPlayerActionThread.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 delta--;
             }

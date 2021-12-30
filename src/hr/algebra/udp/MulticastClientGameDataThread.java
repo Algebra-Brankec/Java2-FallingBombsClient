@@ -28,7 +28,7 @@ import javafx.scene.Scene;
  *
  * @author dnlbe
  */
-public class MulticastClientThread extends Thread {
+public class MulticastClientGameDataThread extends Thread {
 
     private static final String PROPERTIES_FILE = "socket.properties";
     private static final String CLIENT_PORT = "CLIENT_PORT";
@@ -45,7 +45,7 @@ public class MulticastClientThread extends Thread {
         try {
             PROPERTIES.load(new FileInputStream(PROPERTIES_FILE));
         } catch (IOException ex) {
-            Logger.getLogger(MulticastClientThread.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MulticastClientGameDataThread.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -91,9 +91,9 @@ public class MulticastClientThread extends Thread {
             }
 
         } catch (SocketException | UnknownHostException e) {
-            Logger.getLogger(MulticastClientThread.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(MulticastClientGameDataThread.class.getName()).log(Level.SEVERE, null, e);
         } catch (IOException e) {
-            Logger.getLogger(MulticastClientThread.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(MulticastClientGameDataThread.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 }

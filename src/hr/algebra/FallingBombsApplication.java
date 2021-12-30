@@ -6,7 +6,7 @@
 package hr.algebra;
 
 import hr.algebra.controller.PlayerMenuController;
-import hr.algebra.udp.MulticastClientThread;
+import hr.algebra.udp.MulticastClientGameDataThread;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.logging.Level;
