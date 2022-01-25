@@ -301,5 +301,17 @@ public class GameController implements Initializable {
     private void loadSAX() {
         playerSetting = SAXUtils.loadPlayerSettings();
     }
+
+    @FXML
+    private void assignGreenRedColor(ActionEvent event) {
+        playerSetting.player1Color = "green";
+        playerSetting.player2Color = "red";
+    }
+
+    @FXML
+    private void assignPurpleBlueColor(ActionEvent event) {
+        playerSetting.player1Color = "purple";
+        playerSetting.player2Color = "blue";
+    }
     
 }
