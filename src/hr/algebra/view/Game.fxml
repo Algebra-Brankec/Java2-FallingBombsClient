@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane id="AnchorPane" onKeyPressed="#keyPressed" onKeyReleased="#keyReleased" prefHeight="545.0" prefWidth="847.0" styleClass="anchorSky" stylesheets="@../style/main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.algebra.controller.GameController">
@@ -8,12 +11,32 @@
       <AnchorPane fx:id="apLevel" prefHeight="545.0" prefWidth="857.0">
          <children>
             <Button fx:id="btnFence" layoutX="416.0" layoutY="304.0" mnemonicParsing="false" prefHeight="194.0" prefWidth="1.0" styleClass="buttonFence" stylesheets="@../style/main.css" />
-            <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" prefHeight="59.0" prefWidth="168.0" styleClass="buttonHealthBox" stylesheets="@../style/main.css" />
-            <Button layoutX="675.0" layoutY="14.0" mnemonicParsing="false" prefHeight="59.0" prefWidth="168.0" styleClass="buttonHealthBox" stylesheets="@../style/main.css" />
-            <Button fx:id="btnMenu" layoutX="401.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnMenuAction" text="Menu" />
-            <Button fx:id="btnPauseResume" layoutX="404.0" layoutY="44.0" mnemonicParsing="false" onAction="#btnPauseResumeAction" text="Start" />
+            <Button layoutX="14.0" layoutY="31.0" mnemonicParsing="false" prefHeight="59.0" prefWidth="168.0" styleClass="buttonHealthBox" stylesheets="@../style/main.css" />
+            <Button layoutX="675.0" layoutY="31.0" mnemonicParsing="false" prefHeight="59.0" prefWidth="168.0" styleClass="buttonHealthBox" stylesheets="@../style/main.css" />
+            <Button fx:id="btnMenu" layoutX="401.0" layoutY="28.0" mnemonicParsing="false" onAction="#btnMenuAction" text="Menu" />
+            <Button fx:id="btnPauseResume" layoutX="404.0" layoutY="58.0" mnemonicParsing="false" onAction="#btnPauseResumeAction" text="Start" />
          </children>
       </AnchorPane>
       <Button fx:id="btnFloor" layoutY="498.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="857.0" styleClass="buttonFloor" stylesheets="@../style/main.css" />
+      <MenuBar prefHeight="25.0" prefWidth="857.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="XML DOM">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#loadDOM" text="Load data" />
+                  <MenuItem mnemonicParsing="false" onAction="#saveDOM" text="Save data" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="SAX">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#loadSAX" text="Load data" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Color">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Invert" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
    </children>
 </AnchorPane>

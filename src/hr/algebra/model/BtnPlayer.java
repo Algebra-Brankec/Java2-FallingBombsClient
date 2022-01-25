@@ -14,17 +14,17 @@ import javafx.scene.layout.AnchorPane;
 public class BtnPlayer extends Button {
     public String side;
     
-    public BtnPlayer(AnchorPane ap, int side, int x, int y, int width, int height, int health) {
+    public BtnPlayer(AnchorPane ap, int side, int x, int y, int width, int height, int health, String colorLeft, String colorRight) {
         setPrefSize(width, height);
         setLayoutX(x);
         setLayoutY(y);
         switch(side){
             case 1:
-                setStyle("-fx-background-color: green");
+                setStyle("-fx-background-color: " + colorLeft);
                 this.side = "left";
                 break;
             case 2:
-                setStyle("-fx-background-color: red"); 
+                setStyle("-fx-background-color: " + colorRight); 
                 this.side = "right";
                 break;
         }

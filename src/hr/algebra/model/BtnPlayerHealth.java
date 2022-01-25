@@ -20,11 +20,11 @@ public class BtnPlayerHealth extends Button {
         
         if (side == 1) {
             setLayoutX(28);
-            setLayoutY(31);
+            setLayoutY(51);
         }
         if (side == 2) {
             setLayoutX(688);
-            setLayoutY(31);
+            setLayoutY(51);
         }
         ap.getChildren().add(this);
     }

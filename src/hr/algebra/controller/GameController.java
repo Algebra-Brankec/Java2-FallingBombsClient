@@ -10,9 +10,13 @@ import hr.algebra.model.BtnBomb;
 import hr.algebra.model.BtnPlayer;
 import hr.algebra.model.BtnPlayerHealth;
 import hr.algebra.model.Player;
+import hr.algebra.model.PlayerSetting;
 import hr.algebra.model.UDPDataPackage;
+import hr.algebra.repository.Repository;
 import hr.algebra.udp.MulticastClientGameDataThread;
 import hr.algebra.udp.UnicastClientPlayerActionThread;
+import hr.algebra.utilities.DOMUtils;
+import hr.algebra.utilities.SAXUtils;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -42,7 +46,6 @@ public class GameController implements Initializable {
 
     private MulticastClientGameDataThread t1;
     private UnicastClientPlayerActionThread unicastCliThread;
-    private int serverPort;
     private PlayerMenuController playerMenuController;
     
     private UDPDataPackage udpPackage = new UDPDataPackage();
@@ -50,6 +53,8 @@ public class GameController implements Initializable {
     private List<BtnBomb> btnBombs;
     private List<BtnPlayer> btnPlayers;
     private List<BtnPlayerHealth> btnPlayerHealths;
+    
+    private PlayerSetting playerSetting;
     
     private boolean running = false;
     private boolean gameOver = false;
@@ -78,6 +83,7 @@ public class GameController implements Initializable {
         btnBombs = new ArrayList<>();
         btnPlayers = new ArrayList<>();
         btnPlayerHealths = new ArrayList<>();
+        playerSetting = new PlayerSetting("green", "red");
     }    
 
     @FXML
@@ -206,7 +212,7 @@ public class GameController implements Initializable {
     
     private void renderPlayers() {
         for (Player player : udpPackage.getPlayers()) {
-            BtnPlayer btnPlayer = new BtnPlayer(apLevel, player.getSide(), player.getX(), player.getY(), player.getWidth(), player.getHeight(), player.getHealth());
+            BtnPlayer btnPlayer = new BtnPlayer(apLevel, player.getSide(), player.getX(), player.getY(), player.getWidth(), player.getHeight(), player.getHealth(), playerSetting.player1Color, playerSetting.player2Color);
             BtnPlayerHealth btnPlayerHealth = new BtnPlayerHealth(apLevel, player.getSide(), player.getHealth());
             btnPlayers.add(btnPlayer);
             btnPlayerHealths.add(btnPlayerHealth);
@@ -279,6 +285,21 @@ public class GameController implements Initializable {
                 Platform.exit();
             }
         });
+    }
+
+    @FXML
+    private void loadDOM() {
+        playerSetting = DOMUtils.loadPlayerSettings();
+    }
+
+    @FXML
+    private void saveDOM() {
+        DOMUtils.savePlayerSettings(playerSetting);
+    }
+    
+    @FXML
+    private void loadSAX() {
+        playerSetting = SAXUtils.loadPlayerSettings();
     }
     
 }
